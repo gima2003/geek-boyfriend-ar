@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+  <title>Geek Boyfriend | Animated Cover AR</title>
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  <style>
+    html,body {margin:0;width:100%;height:100%;overflow:hidden;background:#080d18;}
+    #ar-root {position:fixed;inset:0;overflow:hidden;}
+    #ar-root a-scene {width:100%;height:100%;}
+    #hud {position:fixed;top:10px;left:10px;right:10px;z-index:10;pointer-events:none;
+      background:rgba(14,15,30,.80);backdrop-filter:blur(8px);border:1px solid rgba(255,200,217,.22);
+      border-radius:14px;padding:12px 14px;color:#ffe8ef;font:14px/1.45 system-ui,sans-serif;}
+    #hud strong {display:block;font-size:16px;letter-spacing:.02em;color:#ffc4d8;}
+    #bottom {position:fixed;bottom:12px;left:12px;right:12px;z-index:10;pointer-events:none;
+      font:12px/1.4 system-ui,sans-serif;color:#fff0f4;text-align:center;
+      text-shadow:0 1px 5px #000;}
+  </style>
+</head>
+<body>
+<div id="ar-root">
+  <!-- Image-based WebAR. This scans a real book cover, NOT a QR marker. -->
+  <a-scene
+    mindar-image="imageTargetSrc: ./targets.mind;"
+    embedded
+    color-space="sRGB"
+    renderer="colorManagement: true; physicallyCorrectLights: true; alpha: true"
+    vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: false">
+    <a-assets timeout="15000">
+      <img id="coral" src="./assets/butterfly_coral.png" />
+      <img id="lavender" src="./assets/butterfly_lavender.png" />
+      <img id="sparkle" src="./assets/sparkle.png" />
+    </a-assets>
+    <a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
+
+    <!-- A portrait cover has roughly width 1 and height 1.5 in target coordinates.
+         Its CENTER is (0,0,0). Positive Z rises above the physical cover. -->
+    <a-entity id="book-cover" mindar-image-target="targetIndex: 0">
+
+      <!-- Butterfly 1: peach butterfly floating out on the left. -->
+      <a-entity position="-0.36 0.15 0.20"
+        animation__flight="property:position; from:-0.36 0.15 0.20; to:-0.22 0.31 0.31; dur:3000; dir:alternate; loop:true; easing:easeInOutSine"
+        animation__turn="property:rotation; from:0 -30 -12; to:8 26 18; dur:1400; dir:alternate; loop:true; easing:easeInOutSine">
+        <a-image src="#coral" width="0.28" height="0.28" material="transparent:true; alphaTest:0.08; side:double"
+          animation="property:scale; from:1 1 1; to:.78 1 .95; dur:500; dir:alternate; loop:true; easing:easeInOutSine"></a-image>
+      </a-entity>
+
+      <!-- Butterfly 2: lavender butterfly near upper right. -->
+      <a-entity position="0.38 0.29 0.22"
+        animation__flight="property:position; from:0.38 0.29 0.22; to:0.14 0.50 0.32; dur:3900; dir:alternate; loop:true; easing:easeInOutSine"
+        animation__turn="property:rotation; from:0 24 12; to:-12 -25 -10; dur:1700; dir:alternate; loop:true; easing:easeInOutSine">
+        <a-image src="#lavender" width="0.25" height="0.25" material="transparent:true; alphaTest:0.08; side:double"
+          animation="property:scale; from:1 1 1; to:.74 1 .9; dur:560; dir:alternate; loop:true; easing:easeInOutSine"></a-image>
+      </a-entity>
+
+      <!-- A third small butterfly near the lower edge. -->
+      <a-entity position="0.28 -0.40 0.15"
+        animation__flight="property:position; from:0.28 -0.40 0.15; to:0.39 -0.22 0.26; dur:4500; dir:alternate; loop:true; easing:easeInOutSine"
+        animation__turn="property:rotation; from:0 -18 0; to:8 24 18; dur:1600; dir:alternate; loop:true; easing:easeInOutSine">
+        <a-image src="#coral" width="0.18" height="0.18" material="transparent:true; alphaTest:0.08; side:double"></a-image>
+      </a-entity>
+
+      <!-- Stars sparkle above the printed cover. -->
+      <a-image src="#sparkle" position="-0.36 0.59 0.12" width="0.11" height="0.11" material="transparent:true; side:double"
+        animation="property:scale; from:.4 .4 .4; to:1.4 1.4 1.4; dur:1500; loop:true; dir:alternate; easing:easeInOutSine"></a-image>
+      <a-image src="#sparkle" position="0.10 0.57 0.15" width="0.08" height="0.08" material="transparent:true; side:double"
+        animation="property:scale; from:1.1 1.1 1.1; to:.18 .18 .18; dur:1200; loop:true; dir:alternate; easing:easeInOutSine"></a-image>
+      <a-image src="#sparkle" position="0.42 -0.05 0.12" width="0.11" height="0.11" material="transparent:true; side:double"
+        animation="property:scale; from:.3 .3 .3; to:1.25 1.25 1.25; dur:1700; loop:true; dir:alternate; easing:easeInOutSine"></a-image>
+      <a-image src="#sparkle" position="-0.31 -0.53 0.10" width="0.07" height="0.07" material="transparent:true; side:double"
+        animation="property:scale; from:1.15 1.15 1.15; to:.2 .2 .2; dur:1900; loop:true; dir:alternate; easing:easeInOutSine"></a-image>
+
+      <!-- A tiny rotating satellite above the top-right of the cover. -->
+      <a-entity position="0.29 0.49 0.24"
+         animation__float="property:position; from:0.29 0.49 0.20; to:0.29 0.54 0.29; dur:1900; dir:alternate; loop:true; easing:easeInOutSine">
+        <a-entity rotation="18 0 20" animation="property:rotation; from:18 0 20; to:18 360 20; dur:14000; loop:true; easing:linear">
+          <a-box width="0.07" height="0.065" depth="0.065" color="#ffd6a8"></a-box>
+          <a-box position="-0.095 0 0" width="0.12" height="0.055" depth="0.008" color="#4e8db6"></a-box>
+          <a-box position="0.095 0 0" width="0.12" height="0.055" depth="0.008" color="#4e8db6"></a-box>
+          <a-sphere position="0 0.048 0" radius="0.018" color="#f6f5ed"></a-sphere>
+        </a-entity>
+      </a-entity>
+    </a-entity>
+  </a-scene>
+</div>
+<div id="hud"><strong>GEEK BOYFRIEND · COVER AR</strong><span id="status">Allow camera access, then aim at the COMPLETE printed cover.</span></div>
+<div id="bottom">Keep the cover flat and well lit · Hold your phone steady · Use the exact cover used for targets.mind</div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const marker = document.querySelector('#book-cover');
+    const status = document.querySelector('#status');
+    marker.addEventListener('targetFound', () => {
+      status.textContent = 'Cover found! Move slowly to see the butterflies float above the book.';
+    });
+    marker.addEventListener('targetLost', () => {
+      status.textContent = 'Cover lost. Point the camera at the whole cover again.';
+    });
+    document.querySelector('a-scene').addEventListener('arError', () => {
+      status.textContent = 'AR could not start. Check camera permission, HTTPS, and the compiled targets.mind file.';
+    });
+    fetch('./targets.mind', { method:'HEAD' }).then(r => {
+      if (!r.ok) status.textContent = 'Missing targets.mind! Compile the selected cover and upload the file into cover-ar/.';
+    }).catch(() => {
+      status.textContent = 'Could not load targets.mind. Check your connection and file path.';
+    });
+  });
+</script>
+</body>
+</html>
